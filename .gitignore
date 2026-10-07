@@ -1,0 +1,17 @@
+# PlatformIO build output and dependencies
+.pio/
+*.log
+
+# Local Wi-Fi and dashboard credentials
+src/secrets.h
+
+# Generated blocklist
+data/blocklist.bin
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Editor and scratch files
+.vscode/
+*.bak
