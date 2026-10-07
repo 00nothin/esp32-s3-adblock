@@ -1,6 +1,6 @@
 # ESP32-S3 N16R8 AdBlock + 2.8-inch SPI TFT
 
-This is a separate S3 copy. The original ESP32-C3 project in the parent folder is unchanged.
+This is a fork of [ESP32-C3 AdBlock](https://github.com/00nothin/esp32-c3-adblock-main), adapted for the ESP32-S3 N16R8 and 2.8-inch SPI TFT.
 
 ## Hardware
 
