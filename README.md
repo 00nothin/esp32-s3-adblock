@@ -35,17 +35,29 @@ This does not change the original synchronous upstream DNS forwarding; throughpu
 
 ## Build and flash
 
-Open a PowerShell terminal **in this folder**. PlatformIO is installed locally; the commands below use its full path because `pio` may not be on PATH:
+Install [PlatformIO Core](https://docs.platformio.org/en/latest/core/installation/index.html) or the PlatformIO IDE extension, then open a terminal **in this folder**. Build the firmware with:
 
-```powershell
-$pio = "$env:USERPROFILE/.platformio/penv/Scripts/platformio.exe"
-& $pio run -e s3_hotspot
-& $pio device list
-# Replace COMx with the S3's port:
-& $pio run -e s3_hotspot -t upload --upload-port COMx
-& $pio run -e s3_hotspot -t uploadfs --upload-port COMx
-& $pio device monitor -p COMx -b 115200
+```sh
+pio run -e s3_hotspot
 ```
+
+Use `pio device list` to find the board's serial port. Then replace the example port below with the one shown on your system:
+
+| Operating system | Example serial port |
+| --- | --- |
+| Windows | `COM3` |
+| Linux | `/dev/ttyACM0` or `/dev/ttyUSB0` |
+| macOS | `/dev/cu.usbmodem...` or `/dev/cu.usbserial...` |
+
+Upload the firmware and filesystem, then open the serial monitor:
+
+```sh
+pio run -e s3_hotspot -t upload --upload-port PORT
+pio run -e s3_hotspot -t uploadfs --upload-port PORT
+pio device monitor -p PORT -b 115200
+```
+
+On Windows, replace `PORT` with the COM port, for example `COM3`. If `pio` is not on `PATH`, run PlatformIO Core's executable directly; a common Windows installation path is `%USERPROFILE%\.platformio\penv\Scripts\platformio.exe`. On Linux, your user may need permission to access the serial device (often by joining the `dialout` or `uucp` group, depending on the distribution); log out and back in after changing group membership.
 
 The default `s3_hotspot` environment enables IPv4 NAT and the private Wi-Fi hotspot. `s3_tft` is an alternative for a DNS-only server on your existing LAN; set your router/client DNS to the S3 IP when using that environment. Keep the same environment for firmware and filesystem uploads.
 
@@ -67,9 +79,9 @@ On the S3, holding BOOT during reset enters the ROM downloader. Release BOOT aft
 
 ## Local checks
 
-```powershell
-& $pio run -e s3_hotspot
-& $pio run -e s3_tft
-& $pio run -e s3_hotspot -t buildfs
-py -3 -m unittest discover -s tools -p 'test_*.py' -v
+```sh
+pio run -e s3_hotspot
+pio run -e s3_tft
+pio run -e s3_hotspot -t buildfs
+python -m unittest discover -s tools -p 'test_*.py' -v
 ```
